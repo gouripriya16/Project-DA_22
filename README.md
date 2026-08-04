@@ -6,5 +6,5 @@
 pip install streamlit
 
 
-### command ti run this project
+### command to run this project
 streamlit run main.py
