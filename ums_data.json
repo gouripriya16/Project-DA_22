@@ -1,0 +1,119 @@
+{
+    "colleges": [
+        {
+            "cname": "SR",
+            "students": [
+                {
+                    "rollno": "701",
+                    "name": "Sravathi",
+                    "branch": "CSD",
+                    "semester": null,
+                    "subjects": [],
+                    "attendance": {},
+                    "marks": null,
+                    "grade": null
+                },
+                {
+                    "rollno": "701",
+                    "name": "Sravanthi",
+                    "branch": "CSD",
+                    "semester": null,
+                    "subjects": [],
+                    "attendance": {},
+                    "marks": null,
+                    "grade": null
+                }
+            ],
+            "teachers": [
+                {
+                    "name": "Pusphalatha",
+                    "branch": "CSD",
+                    "subject": "MAthematics"
+                }
+            ]
+        },
+        {
+            "cname": "KITS",
+            "students": [
+                {
+                    "rollno": "701",
+                    "name": "Sravanthi",
+                    "branch": "CSD",
+                    "semester": null,
+                    "subjects": [],
+                    "attendance": {},
+                    "marks": null,
+                    "grade": null
+                }
+            ],
+            "teachers": []
+        },
+        {
+            "cname": "SRITW",
+            "students": [
+                {
+                    "rollno": "701",
+                    "name": "Sravanthi",
+                    "branch": "CSD",
+                    "semester": "Semester 1",
+                    "subjects": [
+                        "Python",
+                        "ATCD"
+                    ],
+                    "attendance": 75.0,
+                    "marks": 75.0,
+                    "grade": "B+"
+                },
+                {
+                    "rollno": "703",
+                    "name": "Sai priya",
+                    "branch": "CSD",
+                    "semester": "Semester 1",
+                    "subjects": [
+                        "mathematics"
+                    ],
+                    "attendance": 75.0,
+                    "marks": 60.0,
+                    "grade": "B"
+                },
+                {
+                    "rollno": "704",
+                    "name": "Asritha",
+                    "branch": "CSD",
+                    "semester": null,
+                    "subjects": [],
+                    "attendance": {},
+                    "marks": null,
+                    "grade": null
+                }
+            ],
+            "teachers": [
+                {
+                    "name": "Aruna",
+                    "branch": "CSD",
+                    "subject": "DBMS"
+                },
+                {
+                    "name": "Pushpalatha",
+                    "branch": "CSD",
+                    "subject": "Mathematics"
+                }
+            ]
+        },
+        {
+            "cname": "SRITW",
+            "students": [],
+            "teachers": []
+        },
+        {
+            "cname": "SRITW",
+            "students": [],
+            "teachers": []
+        },
+        {
+            "cname": "JNTUH",
+            "students": [],
+            "teachers": []
+        }
+    ]
+}

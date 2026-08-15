@@ -3,6 +3,7 @@
 
 # to build the frontend
 import streamlit as st
+import json
 
 # app front page configuration
 st.set_page_config(
@@ -15,6 +16,7 @@ st.title("University Management System")
 # create a empty list to store list of colleges
 if "colleges" not in st.session_state:
     st.session_state.colleges = []
+
 
 # side bar
 menu_choice = st.sidebar.radio(
@@ -60,6 +62,8 @@ class student(person):
         self.semester = None
         self.subjects = []
         self.attendance = {}
+        self.marks = None
+        self.grade = None
 
 class teacher(person):
     def __init__(self, branch, name, subject):
@@ -69,11 +73,97 @@ class teacher(person):
 # finding and returning the college which student selected
 def find_college(cname):
     return next((c for c in st.session_state.colleges if c.cname == cname), None)
+
+# load saved data
+if "data_loaded" not in st.session_state:
+    st.session_state.data_loaded = True
+
+    try:
+        with open("ums_data.json", "r") as file:
+            saved_data = json.load(file)
+
+        for college_data in saved_data.get("colleges", []):
+
+            clg = college(college_data["cname"])
+
+            for student_data in college_data.get("students", []):
+                s = student(
+                    student_data["rollno"],
+                    student_data["name"],
+                    student_data["branch"]
+                )
+
+                s.semester = student_data.get("semester")
+                s.subjects = student_data.get("subjects", [])
+                s.attendance = student_data.get("attendance", {})
+                s.marks = student_data.get("marks")
+                s.grade = student_data.get("grade")
+
+                clg.add_student(s)
+
+            for teacher_data in college_data.get("teachers", []):
+
+                t = teacher(
+                    teacher_data["branch"],
+                    teacher_data["name"],
+                    teacher_data["subject"]
+                )
+
+                clg.add_teacher(t)
+
+            st.session_state.colleges.append(clg)
+
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+
+def save_data():
+    data = {
+        "colleges": []
+    }
+
+    for c in st.session_state.colleges:
+
+        college_data = {
+            "cname": c.cname,
+            "students": [],
+            "teachers": []
+        }
+
+        for s in c.students:
+            student_data = {
+                "rollno": s.rollno,
+                "name": s.name,
+                "branch": s.branch,
+                "semester": s.semester,
+                "subjects": s.subjects,
+                "attendance": s.attendance,
+                "marks": getattr(s, "marks", None),
+                "grade": getattr(s, "grade", None)
+            }
+
+            college_data["students"].append(student_data)
+
+        for t in c.teachers:
+            teacher_data = {
+                "name": t.name,
+                "branch": t.branch,
+                "subject": t.subject
+            }
+
+            college_data["teachers"].append(teacher_data)
+
+        data["colleges"].append(college_data)
+
+    with open("ums_data.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+
 # Create a New college
 if menu_choice == "Create College":
     cname = st.text_input("Enter New College Name")
     if st.button("CREATE"):
         st.session_state.colleges.append(college(cname))
+        save_data()
         st.success(f"{cname} created successfully")
 
 elif menu_choice == "Add Student":
@@ -90,6 +180,7 @@ elif menu_choice == "Add Student":
             else:
                 clg = find_college(clgname)
                 clg.add_student(student(roll, sname, branch))
+                save_data()
                 st.success("Student added successfully")
 
 elif menu_choice == "Add Teacher":
@@ -106,6 +197,7 @@ elif menu_choice == "Add Teacher":
             else:
                 clg = find_college(clgname)
                 clg.add_teacher(teacher(branch, tname, subject))
+                save_data()
                 st.success("teacher added successfully")
 
 elif menu_choice == "Display Students":
@@ -202,6 +294,7 @@ elif menu_choice == "Update Student":
 
                     found_student.name = new_name
                     found_student.branch = new_branch
+                    save_data()
 
                     st.success("Student updated successfully!")
 
@@ -235,6 +328,8 @@ elif menu_choice == "Delete Student":
             if found_student:
 
                 clg.students.remove(found_student)
+
+                save_data()
 
                 st.success("Student deleted successfully!")
 
@@ -334,6 +429,8 @@ elif menu_choice == "Academic Management":
                     found_student.grade = "C"
                 else:
                     found_student.grade = "F"
+
+                save_data()
 
                 st.success("Academic details saved successfully!")
 
@@ -490,7 +587,7 @@ elif menu_choice == "Update Teacher":
                     found_teacher.branch = new_branch
                     found_teacher.subject = new_subject
 
-
+                    save_data()
                     st.success("Teacher updated successfully!")
 
 
@@ -535,7 +632,7 @@ elif menu_choice == "Delete Teacher":
 
                 clg.teachers.remove(found_teacher)
 
-
+                save_data()
                 st.success("Teacher deleted successfully!")
 
 
