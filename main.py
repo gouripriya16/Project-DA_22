@@ -27,6 +27,8 @@ menu_choice = st.sidebar.radio(
         "Search Student",
         "Update Student",
         "Delete Student",
+        "Academic Management",
+        "View Academic Record",
         "Display Teachers",
         "Search Teacher",
         "Update Teacher",
@@ -55,6 +57,9 @@ class student(person):
     def __init__(self, rollno, name, branch):
         super().__init__(branch, name)
         self.rollno = rollno
+        self.semester = None
+        self.subjects = []
+        self.attendance = {}
 
 class teacher(person):
     def __init__(self, branch, name, subject):
@@ -121,6 +126,39 @@ elif menu_choice == "Display Students":
                 st.write(f"{i}. {s.name}")
         else:
             st.warning("No student Found")
+
+elif menu_choice == "Search Student":
+
+    if not st.session_state.colleges:
+        st.info("Please insert a college first")
+
+    else:
+        clgname = st.selectbox(
+            "Choose college",
+            [c.cname for c in st.session_state.colleges]
+        )
+
+        clg = find_college(clgname)
+
+        roll = st.text_input("Enter Student Roll Number")
+
+        if st.button("SEARCH"):
+
+            found_student = None
+
+            for s in clg.students:
+                if s.rollno == roll:
+                    found_student = s
+                    break
+
+            if found_student:
+                st.success("Student found!")
+                st.write("Roll Number:", found_student.rollno)
+                st.write("Name:", found_student.name)
+                st.write("Branch:", found_student.branch)
+
+            else:
+                st.error("Student not found")
 
 elif menu_choice == "Update Student":
 
@@ -223,6 +261,130 @@ elif menu_choice == "Display Teachers":
         else:
             st.warning("No Teacher Found")
 
+elif menu_choice == "Academic Management":
+
+
+    if not st.session_state.colleges:
+        st.info("Please insert a college first")
+
+    else:
+        clgname = st.selectbox(
+            "Choose college",
+            [c.cname for c in st.session_state.colleges]
+        )
+
+        clg = find_college(clgname)
+
+        roll = st.text_input("Enter Student Roll Number")
+
+        semester = st.selectbox(
+            "Select Semester",
+            ["Semester 1", "Semester 2", "Semester 3",
+             "Semester 4", "Semester 5", "Semester 6",
+             "Semester 7", "Semester 8"]
+        )
+
+        subjects = st.text_input(
+            "Enter Subjects (separate with comma)"
+        )
+        attendence = st.number_input(
+            "Enter Attendance Percentage",
+            min_value=0.0,
+            max_value=100.0,
+            step=1.0
+        )
+
+        marks = st.number_input(
+            "Enter Marks",
+            min_value=0.0,
+            max_value=100.0,
+            step=1.0
+        )
+
+        if st.button("SAVE ACADEMIC DETAILS"):
+
+            found_student = None
+
+            for s in clg.students:
+                if s.rollno == roll:
+                    found_student = s
+                    break
+
+            if found_student:
+
+                found_student.semester = semester
+
+                found_student.subjects = [
+                    subject.strip()
+                    for subject in subjects.split(",")
+                    if subject.strip()
+                ]
+                found_student.attendance = attendence
+                
+                found_student.marks = marks
+                if marks >=90:
+                    found_student.grade = "A+"
+                elif marks >=80:
+                    found_student.grade = "A"
+                elif marks >=70:
+                    found_student.grade = "B+"
+                elif marks >=60:
+                    found_student.grade = "B"
+                elif marks >=50:
+                    found_student.grade = "C"
+                else:
+                    found_student.grade = "F"
+
+                st.success("Academic details saved successfully!")
+
+                st.write("Student:", found_student.name)
+                st.write("Semester:", found_student.semester)
+                st.write("Subjects:", found_student.subjects)
+                st.write("Attendance:", found_student.attendance)
+                st.write("Marks:", found_student.marks)
+                st.write("Grade:", found_student.grade)
+            else:
+                st.error("Student not found")
+
+elif menu_choice == "View Academic Record":
+
+    if not st.session_state.colleges:
+        st.info("Please insert a college first")
+
+    else:
+        clgname = st.selectbox(
+            "Choose college",
+            [c.cname for c in st.session_state.colleges]
+        )
+
+        clg = find_college(clgname)
+
+        roll = st.text_input("Enter Student Roll Number")
+
+        if st.button("VIEW RECORD"):
+
+            found_student = None
+
+            for s in clg.students:
+                if s.rollno == roll:
+                    found_student = s
+                    break
+            if found_student:
+
+                st.success("Academic Record Found!")
+
+                st.write("Student:", found_student.name)
+                st.write("Roll Number:", found_student.rollno)
+                st.write("Branch:", found_student.branch)
+                st.write("Semester:", found_student.semester)
+                st.write("Subjects:", found_student.subjects)
+                st.write("Attendance:", found_student.attendance)
+                st.write("Marks:", found_student.marks)
+                st.write("Grade:", found_student.grade)
+
+            else:
+                st.error("Student not found")
+
 
 elif menu_choice == "Search Teacher":
 
@@ -288,8 +450,6 @@ elif menu_choice == "Update Teacher":
 
 
         if st.button("FIND TEACHER"):
-
-
             found_teacher = None
 
 
@@ -381,6 +541,8 @@ elif menu_choice == "Delete Teacher":
 
             else:
                 st.error("Teacher not found")
+
+
 elif menu_choice == "List College":
     if not st.session_state.colleges:
         st.info("Please insert a college first")
