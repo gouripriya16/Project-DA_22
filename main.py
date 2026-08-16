@@ -22,6 +22,10 @@ if "colleges" not in st.session_state:
 menu_choice = st.sidebar.radio(
     "SELECT ACTION",
     (
+        "Dashboard",
+        "Student Dashboard",
+        "Teacher Dashboard",
+        "College Statistics",
         "Create College",
         "Add Student",
         "Add Teacher",
@@ -158,8 +162,141 @@ def save_data():
         json.dump(data, file, indent=4)
 
 
+# Dashboard
+if menu_choice == "Dashboard":
+    total_colleges = len(st.session_state.colleges)
+
+    total_students = sum(
+        len(c.students)
+        for c in st.session_state.colleges
+    )
+
+    total_teachers = sum(
+        len(c.teachers)
+        for c in st.session_state.colleges
+    )
+
+    st.subheader("University Management Dashboard")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric("Total Colleges", total_colleges)
+
+    with col2:
+        st.metric("Total Students", total_students)
+
+    with col3:
+        st.metric("Total Teachers", total_teachers)
+
+
+# Student Dashboard
+elif menu_choice == "Student Dashboard":
+
+    if not st.session_state.colleges:
+        st.info("Please insert a college first")
+
+    else:
+        clgname = st.selectbox(
+            "Choose college",
+            [c.cname for c in st.session_state.colleges]
+        )
+
+        clg = find_college(clgname)
+
+        roll = st.text_input("Enter Student Roll Number")
+
+        if st.button("VIEW STUDENT"):
+
+            found_student = None
+
+            for s in clg.students:
+                if s.rollno == roll:
+                    found_student = s
+                    break
+
+            if found_student:
+
+                st.success("Student Found!")
+
+                st.subheader("Student Details")
+
+                st.write("Name:", found_student.name)
+                st.write("Roll Number:", found_student.rollno)
+                st.write("Branch:", found_student.branch)
+                st.write("Semester:", found_student.semester)
+                st.write("Subjects:", found_student.subjects)
+                st.write("Attendance:", found_student.attendance)
+                st.write("Marks:", found_student.marks)
+                st.write("Grade:", found_student.grade)
+
+            else:
+                st.error("Student not found")
+
+
+# Teacher Dashboard
+elif menu_choice == "Teacher Dashboard":
+
+    if not st.session_state.colleges:
+        st.info("Please insert a college first")
+
+    else:
+        clgname = st.selectbox(
+            "Choose college",
+            [c.cname for c in st.session_state.colleges]
+        )
+
+        clg = find_college(clgname)
+
+        teacher_names = [t.name for t in clg.teachers]
+
+        if teacher_names:
+
+            tname = st.selectbox(
+                "Choose Teacher",
+                teacher_names
+            )
+
+            found_teacher = None
+
+            for t in clg.teachers:
+                if t.name == tname:
+                    found_teacher = t
+                    break
+
+            if found_teacher:
+
+                st.success("Teacher Found!")
+
+                st.subheader("Teacher Details")
+
+                st.write("Name:", found_teacher.name)
+                st.write("Branch:", found_teacher.branch)
+                st.write("Subject:", found_teacher.subject)
+
+        else:
+            st.warning("No Teacher Found")
+
+
+# College Statistics
+elif menu_choice == "College Statistics":
+
+    if not st.session_state.colleges:
+        st.info("Please insert a college first")
+
+    else:
+        st.subheader("College Statistics")
+
+        for c in st.session_state.colleges:
+
+            st.write("College:", c.cname)
+            st.write("Students:", len(c.students))
+            st.write("Teachers:", len(c.teachers))
+
+            st.divider()
+
 # Create a New college
-if menu_choice == "Create College":
+elif menu_choice == "Create College":
     cname = st.text_input("Enter New College Name")
     if st.button("CREATE"):
         st.session_state.colleges.append(college(cname))
