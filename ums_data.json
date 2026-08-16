@@ -2,83 +2,53 @@
     "colleges": [
         {
             "cname": "SR",
-            "students": [
-                {
-                    "rollno": "701",
-                    "name": "Sravathi",
-                    "branch": "CSD",
-                    "semester": null,
-                    "subjects": [],
-                    "attendance": {},
-                    "marks": null,
-                    "grade": null
-                },
-                {
-                    "rollno": "701",
-                    "name": "Sravanthi",
-                    "branch": "CSD",
-                    "semester": null,
-                    "subjects": [],
-                    "attendance": {},
-                    "marks": null,
-                    "grade": null
-                }
-            ],
-            "teachers": [
-                {
-                    "name": "Pusphalatha",
-                    "branch": "CSD",
-                    "subject": "MAthematics"
-                }
-            ]
+            "students": [],
+            "teachers": []
         },
         {
             "cname": "KITS",
-            "students": [
-                {
-                    "rollno": "701",
-                    "name": "Sravanthi",
-                    "branch": "CSD",
-                    "semester": null,
-                    "subjects": [],
-                    "attendance": {},
-                    "marks": null,
-                    "grade": null
-                }
-            ],
+            "students": [],
             "teachers": []
         },
         {
             "cname": "SRITW",
             "students": [
                 {
-                    "rollno": "701",
-                    "name": "Sravanthi",
+                    "rollno": "734",
+                    "name": "Gouri",
                     "branch": "CSD",
                     "semester": "Semester 1",
                     "subjects": [
-                        "Python",
-                        "ATCD"
+                        "maths",
+                        "DAA"
                     ],
                     "attendance": 75.0,
-                    "marks": 75.0,
-                    "grade": "B+"
+                    "marks": 85.0,
+                    "grade": "A"
                 },
                 {
-                    "rollno": "703",
-                    "name": "Sai priya",
+                    "rollno": "735",
+                    "name": "Sathwiks",
                     "branch": "CSD",
-                    "semester": "Semester 1",
-                    "subjects": [
-                        "mathematics"
-                    ],
-                    "attendance": 75.0,
-                    "marks": 60.0,
-                    "grade": "B"
+                    "semester": null,
+                    "subjects": [],
+                    "attendance": {},
+                    "marks": null,
+                    "grade": null
                 },
                 {
-                    "rollno": "704",
-                    "name": "Asritha",
+                    "rollno": "736",
+                    "name": "Dhikshitha",
+                    "branch": "CSD",
+                    "semester": null,
+                    "subjects": [],
+                    "attendance": {},
+                    "marks": null,
+                    "grade": null
+                },
+                {
+                    "rollno": "737",
+                    "name": "Gayathri",
                     "branch": "CSD",
                     "semester": null,
                     "subjects": [],
@@ -88,30 +58,40 @@
                 }
             ],
             "teachers": [
+                {
+                    "name": "Ruchinandhan",
+                    "branch": "CSD",
+                    "subject": "NLP"
+                },
                 {
                     "name": "Aruna",
                     "branch": "CSD",
                     "subject": "DBMS"
                 },
                 {
-                    "name": "Pushpalatha",
+                    "name": "Pushpa",
                     "branch": "CSD",
-                    "subject": "Mathematics"
+                    "subject": "Maths"
+                },
+                {
+                    "name": "Soujanya",
+                    "branch": "CSD",
+                    "subject": "English"
+                },
+                {
+                    "name": "Cheranjevii",
+                    "branch": "CSD",
+                    "subject": "DAA"
                 }
             ]
         },
         {
-            "cname": "SRITW",
-            "students": [],
-            "teachers": []
-        },
-        {
-            "cname": "SRITW",
-            "students": [],
-            "teachers": []
-        },
-        {
             "cname": "JNTUH",
+            "students": [],
+            "teachers": []
+        },
+        {
+            "cname": "IIIT",
             "students": [],
             "teachers": []
         }

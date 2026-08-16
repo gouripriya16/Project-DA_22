@@ -27,6 +27,7 @@ menu_choice = st.sidebar.radio(
         "Teacher Dashboard",
         "College Statistics",
         "Create College",
+        "Delete College",
         "Add Student",
         "Add Teacher",
         "Display Students",
@@ -299,9 +300,42 @@ elif menu_choice == "College Statistics":
 elif menu_choice == "Create College":
     cname = st.text_input("Enter New College Name")
     if st.button("CREATE"):
-        st.session_state.colleges.append(college(cname))
-        save_data()
-        st.success(f"{cname} created successfully")
+        if not cname.strip():
+            st.error("College name cannot be empty")
+        elif find_college(cname):
+            st.error("College already exists")
+        else:
+            st.session_state.colleges.append(college(cname))
+            save_data()
+            st.success(f"{cname} created successfully")
+
+
+# Delete College
+elif menu_choice == "Delete College":
+
+    if not st.session_state.colleges:
+        st.info("No colleges available")
+
+    else:
+        clgname = st.selectbox(
+            "Choose college to delete",
+            [c.cname for c in st.session_state.colleges]
+        )
+
+        if st.button("DELETE COLLEGE"):
+
+            selected_college = find_college(clgname)
+
+            if selected_college.students or selected_college.teachers:
+                st.error(
+                    "This college contains students or teachers. "
+                    "Delete them first."
+                )
+
+            else:
+                st.session_state.colleges.remove(selected_college)
+                save_data()
+                st.success(f"{clgname} deleted successfully")
 
 elif menu_choice == "Add Student":
     if not st.session_state.colleges:
@@ -316,9 +350,13 @@ elif menu_choice == "Add Student":
                 st.error("Please Enter all the details")
             else:
                 clg = find_college(clgname)
-                clg.add_student(student(roll, sname, branch))
-                save_data()
-                st.success("Student added successfully")
+                existing_student = next((s for s in clg.students if s.rollno == roll),None)
+                if existing_student:
+                    st.error("Student with this roll Number already exists")
+                else:
+                    clg.add_student(student(roll, sname, branch))
+                    save_data()
+                    st.success("Student added successfully")
 
 elif menu_choice == "Add Teacher":
     if not st.session_state.colleges:
@@ -333,9 +371,13 @@ elif menu_choice == "Add Teacher":
                 st.error("Please Enter all the details")
             else:
                 clg = find_college(clgname)
-                clg.add_teacher(teacher(branch, tname, subject))
-                save_data()
-                st.success("teacher added successfully")
+                existing_teacher = next((t for t in clg.teachers if t.name == tname and t.branch == branch and t.subject == subject),None)
+                if existing_teacher:
+                    st.error("This teacher already exists")
+                else:
+                    clg.add_teacher(teacher(branch, tname, subject))
+                    save_data()
+                    st.success("Teacher added successfully")
 
 elif menu_choice == "Display Students":
     if not st.session_state.colleges:
@@ -376,7 +418,7 @@ elif menu_choice == "Search Student":
             found_student = None
 
             for s in clg.students:
-                if s.rollno == roll:
+                if s.rollno == roll.strip():
                     found_student = s
                     break
 
@@ -428,12 +470,13 @@ elif menu_choice == "Update Student":
                 )
 
                 if st.button("UPDATE"):
-
-                    found_student.name = new_name
-                    found_student.branch = new_branch
-                    save_data()
-
-                    st.success("Student updated successfully!")
+                    if not (new_name.strip() and new_branch.strip()):
+                        st.error("Name and branch cannot be empty")
+                    else:
+                        found_student.name = new_name.strip()
+                        found_student.branch = new_branch.strip()
+                        save_data()
+                        st.success("Student updated successfully!")
 
             else:
                 st.error("Student not found")
@@ -600,7 +643,7 @@ elif menu_choice == "View Academic Record":
             found_student = None
 
             for s in clg.students:
-                if s.rollno == roll:
+                if s.rollno == roll.strip():
                     found_student = s
                     break
             if found_student:
@@ -647,7 +690,7 @@ elif menu_choice == "Search Teacher":
 
 
             for t in clg.teachers:
-                if t.name == tname:
+                if t.name == tname.strip():
                     found_teacher = t
                     break
 
@@ -718,14 +761,14 @@ elif menu_choice == "Update Teacher":
 
 
                 if st.button("UPDATE"):
-
-
-                    found_teacher.name = new_name
-                    found_teacher.branch = new_branch
-                    found_teacher.subject = new_subject
-
-                    save_data()
-                    st.success("Teacher updated successfully!")
+                    if not(new_name.strip() and new_branch.strip() and new_subject.strip()):
+                        st.error("Name,branch and subject cannot be empty")
+                    else:
+                         found_teacher.name = new_name.strip()
+                         found_teacher.branch = new_branch.strip()
+                         found_teacher.subject = new_subject.strip()
+                         save_data()
+                         st.success("Teacher updated successfully!")
 
 
             else:
@@ -759,7 +802,7 @@ elif menu_choice == "Delete Teacher":
 
 
             for t in clg.teachers:
-                if t.name == tname:
+                if t.name == tname.strip():
                     found_teacher = t
                     break
 
